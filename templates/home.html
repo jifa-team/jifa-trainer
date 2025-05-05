@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jifa Trainer - Sobre</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="logo-container">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Jifa Trainer">
+  </div>
+
+  <header class="hero">
+    <h1>Jifa Trainer</h1>
+    <p class="subtitle">Aprendizado de Máquina Interativo</p>
+  </header>
+
+  <main class="container">
+    <section class="about-section">
+      <h2>Sobre o Projeto</h2>
+      <p>O Jifa Trainer é uma plataforma educacional interativa voltada ao ensino e experimentação de algoritmos de aprendizado de máquina.</p>
+      <p> uma interface simples e responsiva, o projeto permite treinar e avaliar modelos, aplicando-os diretamente sobre o clássico conjunto de dados Iris.</p>
+      <p>💡 O Jifa Trainer é uma ferramenta ideal para estudantes, pesquisadores e entusiastas da inteligência artificial que desejam aprender na prática como esses algoritmos funcionam.</p>
+      <p>🌼 O conjunto de dados Iris é um clássico no campo do aprendizado de máquina, contendo informações sobre três espécies de flores Iris, com características como comprimento e largura das pétalas e sépalas.</p>
+      <p>🔍 Explore os dados, treine modelos e faça previsões com facilidade!</p>
+      <p>🚀 Pronto para começar?</p>
+    </section>
+
+    <section class="features-section">
+      <h2>Funcionalidades</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Treinamento</h3>
+          <p>Treine o modelo com diferentes parâmetros para obter a melhor precisão possível.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Testes</h3>
+          <p>Teste o modelo treinado e visualize métricas de desempenho.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Classificação</h3>
+          <p>Classifique novas flores inserindo suas características e obtenha previsões instantâneas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-to-use">
+      <h2>Como Usar</h2>
+      <ol>
+        <li>Clique em "Treino" para treinar o modelo com os dados disponíveis</li>
+        <li>Use "Teste" para avaliar o desempenho do modelo</li>
+        <li>Insira as características de uma nova flor para obter sua classificação</li>
+      </ol>
+    </section>
+
+    <div class="cta-section">
+      <div class="model-selector">
+        <label for="model-select">Selecione o Modelo:</label>
+        <select id="model-select" class="model-dropdown">
+          <option value="knn">K-Nearest Neighbors (KNN)</option>
+        </select>
+      </div>
+      <a href="/classifier" class="btn primary" id="start-btn">Começar</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>Desenvolvido com ❤️ para estudos em Aprendizagem de Máquina</p>
+  </footer>
+
+  <script>
+    document.getElementById('start-btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      const selectedModel = document.getElementById('model-select').value;
+      window.location.href = `/classifier?model=${selectedModel}`;
+    });
+  </script>
+</body>
+
+</html>

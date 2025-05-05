@@ -19,16 +19,27 @@ X_train = X_test = y_train = y_test = None
 
 @app.route('/')
 def home():
-    return render_template('front.html')
+    return render_template('home.html')
+
+@app.route('/classifier')
+def classifier():
+    model_type = request.args.get('model', 'knn')
+    return render_template('front.html', model_type=model_type)
 
 @app.route('/train', methods=['POST'])
 def train():
     global model, X_train, X_test, y_train, y_test
+    model_type = request.args.get('model', 'knn')
+    
     iris = load_iris()
     X_train, X_test, y_train, y_test = train_test_split(
         iris.data, iris.target, test_size=0.3, random_state=42
     )
-    model = KNeighborsClassifier(n_neighbors=3)
+    
+    if model_type == 'knn':
+        model = KNeighborsClassifier(n_neighbors=3)
+    # Adicione outros modelos aqui no futuro
+    
     model.fit(X_train, y_train)
     return jsonify({"message": "Treinamento concluído"})
 
