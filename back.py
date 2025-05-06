@@ -128,4 +128,5 @@ def predict():
         return jsonify({"predicao": f"Cluster {pred}"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True) # linha comentada para produção
+    app.run()
