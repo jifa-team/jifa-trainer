@@ -8,7 +8,8 @@
 </head>
 <body>
   <div class="logo-container">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Jifa Trainer">
+    <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Jifa Trainer"></a>
+    <a href="/" class="back-btn">← Voltar para Home</a>
   </div>
 
   <h1>Classificador de Flores com {{ model_type|upper }}</h1>

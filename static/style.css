@@ -29,11 +29,30 @@ body {
 .logo-container {
   text-align: center;
   padding: 20px;
+  position: relative;
 }
 
 .logo-container img {
   width: 200px;
   max-width: 100%;
+}
+
+.back-btn {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 16px;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: background 0.3s ease;
+}
+
+.back-btn:hover {
+  background: var(--dark-primary);
 }
 
 /* front.html */
@@ -229,6 +248,7 @@ input[type="number"]:focus {
 }
 
 .hero h1 {
+  color: white;
   font-size: 2.5em;
   margin-bottom: 10px;
 }
@@ -401,5 +421,13 @@ footer {
   
   .metrics-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .back-btn {
+    position: static;
+    transform: none;
+    display: block;
+    margin: 10px auto;
+    width: fit-content;
   }
 }
