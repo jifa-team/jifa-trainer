@@ -1,74 +1,193 @@
-# Classificador de Flores com KNN
 
-Esta aplicação é um exemplo simples de um classificador de flores usando o algoritmo KNN aplicado ao dataset Iris. A aplicação é construída com Python e Flask, e exibe tanto a predição para novos valores quanto as métricas de desempenho (acurácia, precisão e recall) para os conjuntos de treinamento e teste. Além disso, o front-end apresenta gráficos da matriz de confusão e da superfície de decisão, e a interface conta com uma logo da UFCA centralizada no topo.
+# 🧠 Jifa Trainer — KNN + Estrutura Modular com Flask
 
-## Pré-requisitos
+> Feito é melhor que o perfeito. — *George Patton* ✨
 
-- Python 3.x instalado
+---
+
+## 🚀 No Princípio...
+
+Antes de tudo, relaxa! 😌  
+Este projeto está hospedado em **servidores 0800**, então **aguenta firme entre 30 e 59 segundos** para ele acordar! 😴⚡
+
+👉 [Acesse aqui a versão online bonitinha](https://jifa-trainer.onrender.com/)
+
+---
+
+## 📦 Resumo das Mudanças
+
+Criamos uma estrutura 🏗️ pensada para organizar os modelos e facilitar a vida:
+
+```
+models/
+├── __init__.py
+├── base_model.py
+└── knn_model.py
+```
+
+### 📚 `base_model.py`
+
+- Classe base abstrata `BaseModel`
+- Métodos comuns para:
+  - Avaliação dos modelos
+  - Geração da matriz de confusão
+  - Visualização da superfície de decisão
+- Métodos abstratos para obrigar implementação correta nos modelos filhos
+
+### 🔍 `knn_model.py`
+
+- Implementa o modelo **KNN**
+- Herda de `BaseModel`
+- Implementa os métodos `train` e `predict`
+- Adiciona lógica específica do KNN
+
+### 💻 `back.py`
+
+- Agora usa a nova estrutura de modelos
+- Código bem mais limpo, modular e expansível
+
+---
+
+## 🌟 Benefícios dessa nova estrutura
+
+✅ **Modularidade** – Cada modelo no seu quadrado (arquivo)  
+✅ **Extensibilidade** – Fica fácil adicionar novos modelos  
+✅ **Manutenibilidade** – Tudo mais organizado e claro  
+✅ **Reutilização** – Métodos compartilhados na classe base  
+✅ **Consistência** – Interface padrão para todos os modelos
+
+---
+
+## 🧪 Adicionando um Novo Modelo
+
+1. Criar um novo arquivo em `models/` (ex: `svm_model.py`)
+2. Herdar da `BaseModel`
+3. Implementar os métodos `train` e `predict`
+4. Registrar o modelo no `__init__.py`
+5. Adicionar a lógica no `back.py`
+
+---
+
+## 🧠 O que é esse projeto mesmo?
+
+Este é um projeto da disciplina de **Aprendizagem de Máquina** do Professor Dr. **Luís Fabrício de Freitas Souza** na **Universidade Federal do Cariri – UFCA**.  
+
+O objetivo é aplicar de forma prática os conceitos aprendidos sobre algoritmos de aprendizado de máquina 🤓
+
+---
+
+## 👥 Discentes Executores
+
+- Gustavo Ferreira Reinaldo  
+- Sayonara Arcanjo da Silva  
+- Alexandra Silva de Paula  
+- Carlos Eduardo de Lima Lira Santana
+
+---
+
+## 📋 O que foi solicitado?
+
+- Clonar o repositório do tutor 👨‍🏫  
+- Incluir novos modelos de aprendizagem de máquina 🤖  
+- Criar um layout próprio com novas funcionalidades ✨  
+
+---
+
+## 📚 Wiki de Execução — baseada nos commits
+
+| Commit | Descrição | Link |
+|--------|-----------|------|
+| #...   | Exemplo de alteração | [Ver na Wiki](#) |
+| #...   | Implementação de novo modelo | [Ver na Wiki](#) |
+
+---
+
+## 🛠️ Agora na Sua Máquina
+
+### ✅ Pré-requisitos
+
+- Python 3.x instalado 🐍
 - Pip (gerenciador de pacotes do Python)
 
-## Como Ambientar o Projeto
+### 📦 Clonando o projeto
 
-1. **Clone o repositório ou extraia os arquivos do projeto**  
-   Certifique-se de que o diretório do projeto contenha, pelo menos:
-   - `back.py`
-   - `front.html` (dentro de um diretório `templates`, se o Flask estiver configurado para isso)
-   - `requirements.txt` com as dependências necessárias
+Clone o repositório ou extraia os arquivos do projeto.
 
-2. **Criar o ambiente virtual**
+Confirme que você tem no diretório pelo menos:
 
-   No diretório do projeto, execute:
-   ```bash
-   python -m venv venv
-   ```
+- `back.py`
+- `templates/front.html`
+- `requirements.txt`
 
-3. **Ativar o ambiente virtual**
+---
 
-   - No Windows (PowerShell):
-     ```bash
-     .\venv\Scripts\Activate
-     ```
-   - No Linux/MacOS:
-     ```bash
-     source venv/bin/activate
-     ```
+### 🔐 Criando o Ambiente Virtual
 
-4. **Instalar as dependências**
+```bash
+python -m venv venv
+```
 
-   Com o ambiente virtual ativo, execute:
-   ```bash
-   pip install -r requirements.txt
-   ```
+#### Ativar o ambiente virtual:
 
-## Executando a Aplicação
+- No **Windows (PowerShell)**:
+  ```bash
+  .\venv\Scripts\Activate
+  ```
 
-Após instalar as dependências, inicie o servidor Flask executando:
+- No **Linux/macOS**:
+  ```bash
+  source venv/bin/activate
+  ```
+
+---
+
+### 📥 Instalando as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### ▶️ Rodando o projeto
+
+Com o ambiente ativado, rode:
+
 ```bash
 python back.py
 ```
 
-O servidor ficará disponível em [http://127.0.0.1:5000](http://127.0.0.1:5000). Abra este endereço em seu navegador para utilizar a aplicação.
-
-## Estrutura do Projeto
-
-A estrutura básica do projeto é a seguinte:
+Acesse no navegador:
 
 ```
-KNN-back-front-sample/
-├── templates/
-│   └── front.html       # Front-end da aplicação
-├── venv/                # Ambiente virtual (gerado)
-├── back.py              # Back-end da aplicação (Flask)
-├── requirements.txt     # Lista de dependências do projeto
-└── README.md            # Este arquivo
+http://127.0.0.1:5000
 ```
-
-## Uso da Aplicação
-
-- **Treino:** Clique no botão "Treino" para treinar o classificador usando o dataset Iris.
-- **Teste:** Clique no botão "Teste" para visualizar as métricas de desempenho do modelo (tanto para o conjunto de treinamento quanto para o teste), além dos gráficos da matriz de confusão e da superfície de decisão.
-- **Teste Novo Valor:** Preencha os campos com as medidas de uma nova amostra e clique em "Enviar Valores" para obter a predição.
 
 ---
 
-Este projeto serve como exemplo básico para aprendizado e demonstração do uso do Flask e do KNN. Sinta-se à vontade para expandir ou modificar conforme necessário.
+## 🧱 Estrutura do Projeto
+
+```
+JIFA-Trainer/
+├── models/ # Modelos de aprendizado
+│ ├── init.py
+│ ├── base_model.py
+│ ├── kmeans_model.py
+│ └── knn_model.py
+├── static/ # Arquivos estáticos (CSS, JS, imagens)
+│ ├── logo.png
+│ ├── script.js
+│ └── style.css
+├── templates/ # Templates HTML (Front-end)
+│ ├── front.html
+│ └── home.html
+├── venv/ # Ambiente virtual Python
+├── .gitignore # Arquivos/pastas ignorados pelo Git
+├── back.py # Backend principal (Flask)
+├── readme.md # Este arquivo lindo que você está lendo 😄
+└── requirements.txt # Dependências do projeto
+```
+
+---
+
+✨ Projeto com carinho e aprendizado 💡
