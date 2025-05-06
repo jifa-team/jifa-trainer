@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classificador de Flores com KNN</title>
+  <title>Classificador de Flores com {{ model_type|upper }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Jifa Trainer">
   </div>
 
-  <h1>Classificador de Flores com KNN</h1>
+  <h1>Classificador de Flores com {{ model_type|upper }}</h1>
 
   <div class="buttons">
     <button id="btnTreinar">Treino</button>
@@ -39,19 +39,170 @@
     <div id="loading" class="loading">
       <div class="spinner"></div><span>Carregando resultados...</span>
     </div>
+    <div id="trainingMessage" class="alert" style="display: none;"></div>
     <div id="resultsContent" class="content">
-      <div id="metrics"></div>
-      <div class="graph">
-        <h3>Matriz de Confusão</h3>
-        <img id="cmImage" alt="Matriz de Confusão">
+      <div id="metrics">
+        <div class="metrics-container">
+          <h3>Métricas de Teste</h3>
+          <div id="testMetrics" class="metrics-grid"></div>
+        </div>
+        <div class="metrics-container">
+          <h3>Métricas de Treino</h3>
+          <div id="trainMetrics" class="metrics-grid"></div>
+        </div>
       </div>
       <div class="graph">
         <h3>Superfície de Decisão</h3>
         <img id="dsImage" alt="Superfície de Decisão">
       </div>
+      <div class="graph" id="confusionMatrixContainer">
+        <h3>Matriz de Confusão</h3>
+        <img id="cmImage" alt="Matriz de Confusão">
+      </div>
     </div>
   </section>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script>
+    const modelType = "{{ model_type }}";
+    
+    function updateMetrics(metrics) {
+      const testMetrics = document.getElementById('testMetrics');
+      const trainMetrics = document.getElementById('trainMetrics');
+      
+      if (modelType === 'knn') {
+        // Métricas do KNN
+        testMetrics.innerHTML = `
+          <div class="metric">
+            <span class="metric-label">Acurácia:</span>
+            <span class="metric-value">${metrics.test_metrics.accuracy}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Precisão:</span>
+            <span class="metric-value">${metrics.test_metrics.precision}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Recall:</span>
+            <span class="metric-value">${metrics.test_metrics.recall}</span>
+          </div>
+        `;
+        
+        trainMetrics.innerHTML = `
+          <div class="metric">
+            <span class="metric-label">Acurácia:</span>
+            <span class="metric-value">${metrics.train_metrics.accuracy}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Precisão:</span>
+            <span class="metric-value">${metrics.train_metrics.precision}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Recall:</span>
+            <span class="metric-value">${metrics.train_metrics.recall}</span>
+          </div>
+        `;
+      } else {
+        // Métricas do K-Means
+        testMetrics.innerHTML = `
+          <div class="metric">
+            <span class="metric-label">Silhouette:</span>
+            <span class="metric-value">${metrics.test_metrics.silhouette}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Calinski-Harabasz:</span>
+            <span class="metric-value">${metrics.test_metrics.calinski_harabasz}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Davies-Bouldin:</span>
+            <span class="metric-value">${metrics.test_metrics.davies_bouldin}</span>
+          </div>
+        `;
+        
+        trainMetrics.innerHTML = `
+          <div class="metric">
+            <span class="metric-label">Silhouette:</span>
+            <span class="metric-value">${metrics.train_metrics.silhouette}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Calinski-Harabasz:</span>
+            <span class="metric-value">${metrics.train_metrics.calinski_harabasz}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Davies-Bouldin:</span>
+            <span class="metric-value">${metrics.train_metrics.davies_bouldin}</span>
+          </div>
+        `;
+      }
+    }
+
+    document.getElementById('btnTreinar').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/train?model=' + modelType, { method: 'POST' });
+        const data = await response.json();
+        const trainingMessage = document.getElementById('trainingMessage');
+        const resultsContent = document.getElementById('resultsContent');
+        trainingMessage.textContent = data.message;
+        trainingMessage.className = 'alert success';
+        trainingMessage.style.display = 'block';
+        resultsContent.style.display = 'none';
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    });
+
+    document.getElementById('btnTestar').addEventListener('click', async () => {
+      const loading = document.getElementById('loading');
+      const content = document.getElementById('resultsContent');
+      const trainingMessage = document.getElementById('trainingMessage');
+      loading.style.display = 'flex';
+      content.style.display = 'none';
+      trainingMessage.style.display = 'none';
+
+      try {
+        const response = await fetch('/test?model=' + modelType);
+        const data = await response.json();
+        
+        updateMetrics(data);
+        
+        document.getElementById('dsImage').src = 'data:image/png;base64,' + data.decision_surface;
+        
+        if (data.confusion_matrix) {
+          document.getElementById('cmImage').src = 'data:image/png;base64,' + data.confusion_matrix;
+          document.getElementById('confusionMatrixContainer').style.display = 'block';
+        } else {
+          document.getElementById('confusionMatrixContainer').style.display = 'none';
+        }
+        
+        loading.style.display = 'none';
+        content.style.display = 'block';
+      } catch (error) {
+        console.error('Erro:', error);
+        loading.style.display = 'none';
+      }
+    });
+
+    document.getElementById('formPredict').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      
+      try {
+        const response = await fetch('/predict?model=' + modelType, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        
+        const alertDiv = document.getElementById('resultadoPredict');
+        alertDiv.textContent = result.predicao;
+        alertDiv.className = 'alert success';
+        alertDiv.style.display = 'block';
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    });
+  </script>
 </body>
 </html>

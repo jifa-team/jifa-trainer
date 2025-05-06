@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from flask import Flask, render_template, request, jsonify
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from models import KNNModel
+from models import KNNModel, KMeansModel
 
 app = Flask(__name__)
 
@@ -37,10 +37,13 @@ def train():
     
     if model_type == 'knn':
         model = KNNModel(n_neighbors=3)
-        model.train(X_train, y_train)
-        model.set_test_data(X_test, y_test)
-    # Adicione outros modelos aqui no futuro
+    elif model_type == 'kmeans':
+        model = KMeansModel(n_clusters=3)
+    else:
+        return jsonify({"error": "Modelo não suportado"}), 400
     
+    model.train(X_train, y_train)
+    model.set_test_data(X_test, y_test)
     return jsonify({"message": "Treinamento concluído"})
 
 @app.route('/test', methods=['GET'])
@@ -68,15 +71,26 @@ def test():
         plt.close()
         return base64.b64encode(buf.getvalue()).decode('utf-8')
 
-    cm_img = gen_confusion_image(model.get_confusion_matrix())
+    # Gera matriz de confusão apenas para KNN
+    cm_img = None
+    if isinstance(model, KNNModel):
+        cm_img = gen_confusion_image(model.get_confusion_matrix())
 
     # Superfície de decisão
     ds_data = model.get_decision_surface()
     plt.figure()
     plt.contourf(ds_data['xx'], ds_data['yy'], ds_data['Z'], alpha=0.3, cmap=plt.cm.coolwarm)
+    
+    # Plota os centros dos clusters para K-Means
+    if isinstance(model, KMeansModel):
+        plt.scatter(ds_data['centers'][:, 0], ds_data['centers'][:, 1], 
+                   c='black', marker='x', s=200, linewidths=3)
+    
     for i, name in enumerate(load_iris().target_names):
         idx = np.where(ds_data['y_test']==i)
-        plt.scatter(ds_data['X_test'][idx,0], ds_data['X_test'][idx,1], edgecolors='k', label=name)
+        plt.scatter(ds_data['X_test'][idx,0], ds_data['X_test'][idx,1], 
+                   edgecolors='k', label=name)
+    
     plt.xlabel('Petala L (cm)')
     plt.ylabel('Petala W (cm)')
     plt.legend()
@@ -89,7 +103,8 @@ def test():
     return jsonify({
         **metrics,
         "confusion_matrix": cm_img,
-        "decision_surface": ds_img
+        "decision_surface": ds_img,
+        "model_type": "knn" if isinstance(model, KNNModel) else "kmeans"
     })
 
 @app.route('/predict', methods=['POST'])
@@ -101,10 +116,16 @@ def predict():
         vals = [float(data[key]) for key in ["sepal_length","sepal_width","petal_length","petal_width"]]
     except:
         return jsonify({"error": "Dados inválidos"}), 400
+    
     pred = model.predict([vals])[0]
-    name = load_iris().target_names[pred]
-    acc = round(model.evaluate()["test_metrics"]["accuracy"]*100, 0)
-    return jsonify({"predicao": f"{name} (ACC: {acc}%)"})
+    
+    if isinstance(model, KNNModel):
+        name = load_iris().target_names[pred]
+        acc = round(model.evaluate()["test_metrics"]["accuracy"]*100, 0)
+        return jsonify({"predicao": f"{name} (ACC: {acc}%)"})
+    else:
+        # Para K-Means, retorna apenas o cluster
+        return jsonify({"predicao": f"Cluster {pred}"})
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -39,7 +39,7 @@ body {
 /* front.html */
 h1 {
   text-align: center;
-  color: var(--text)
+  color: var(--text);
   margin: 20px 0;
   font-size: 2em;
 }
@@ -158,6 +158,50 @@ input[type="number"]:focus {
   margin-top: 20px;
 }
 
+.metrics-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.metrics-container h3 {
+  color: var(--primary);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background: var(--light-background);
+  border-radius: 4px;
+}
+
+.metric-label {
+  font-weight: bold;
+  color: var(--dark-primary);
+  margin-bottom: 5px;
+}
+
+.metric-value {
+  font-size: 1.2em;
+  color: var(--text);
+}
+
+#confusionMatrixContainer {
+  display: none;
+}
+
 .graph {
   margin: 20px 0;
   text-align: center;
@@ -238,73 +282,6 @@ h2 {
   margin-bottom: 10px;
 }
 
-.cta-buttons {
-  text-align: center;
-  margin: 40px 0;
-}
-
-.btn {
-  display: inline-block;
-  padding: 12px 24px;
-  background: var(--primary);
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background 0.3s ease;
-}
-
-.btn:hover {
-  background: var(--dark-primary);
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  background: var(--dark-primary);
-  color: white;
-  margin-top: 40px;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2em;
-  }
-  
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .container {
-    padding: 10px;
-  }
-  
-  section {
-    padding: 20px;
-  }
-  
-  .form-group {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  input[type="number"] {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .buttons button {
-    width: 100%;
-    max-width: 300px;
-    margin: 10px auto;
-  }
-  
-  .predict button[type="submit"] {
-    width: 100%;
-    max-width: 300px;
-  }
-}
-
 .cta-section {
   text-align: center;
   margin: 40px 0;
@@ -354,4 +331,75 @@ footer {
 .model-dropdown option {
   padding: 10px;
   text-align: center;
+}
+
+.cta-buttons {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: var(--dark-primary);
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: var(--dark-primary);
+  color: white;
+  margin-top: 40px;
+}
+
+/* responsividade */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2em;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .container {
+    padding: 10px;
+  }
+  
+  section {
+    padding: 20px;
+  }
+  
+  .form-group {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  input[type="number"] {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .buttons button {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto;
+  }
+  
+  .predict button[type="submit"] {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
 }
