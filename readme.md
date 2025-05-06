@@ -97,8 +97,13 @@ O objetivo é aplicar de forma prática os conceitos aprendidos sobre algoritmos
 
 | Commit | Descrição | Link |
 |--------|-----------|------|
-| #...   | Exemplo de alteração | [Ver na Wiki](#) |
-| #...   | Implementação de novo modelo | [Ver na Wiki](#) |
+| #sem-numero   | Resumo do Projeto | [Ver na Wiki](https://github.com/jifa-team/jifa-trainer/wiki) |
+| #1982e43   | Projeto inicial | [Ver na Wiki](https://github.com/jifa-team/jifa-trainer/wiki/2-Projeto-inicial) |
+| #aec331c   | Separando as coisas | [Ver na Wiki](https://github.com/jifa-team/jifa-trainer/wiki/3-Separando-as-coisas) | 
+| #7417bf5   | Adicionando uma home no projeto | [Ver na Wiki](https://github.com/jifa-team/jifa-trainer/wiki/4-Adicionando-uma-home-no-projeto) |
+| #7724838   | Preparando o projeto para aceitar diferentes modelos | [Ver na Wiki](https://github.com/jifa-team/jifa-trainer/wiki/5-Preparando-o-projeto-para-aceitar-diferentes-modelos) |
+| #8c4234f   | Um novo modelo no projeto: K‐Means | [Ver na Wiki](https://github.com/jifa-team/jifa-trainer/wiki/6-Um-novo-modelo-no-projeto:-K-Means) |
+| #b21bd00   | O projeto ao vivo na web | [Ver na Wiki](https://github.com/jifa-team/jifa-trainer/wiki/7-O-projeto-ao-vivo-na-web) |
 
 ---
 
